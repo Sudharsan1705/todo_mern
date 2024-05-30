@@ -20,7 +20,6 @@ function Todo() {
     function HandleSubmit(e){
         e.preventDefault();
         setBool(bool+1);
-        console.log("add");
     }
     async function HandleClick(e){
         await setEvent(e.target.value);
