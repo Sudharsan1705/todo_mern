@@ -33,6 +33,7 @@ function Todo() {
         e.preventDefault();
         await add();
         setBool(bool+1);
+        console.log("joel");
     }
 
     async function HandleClick(e){
