@@ -32,8 +32,8 @@ function Todo() {
     async function HandleSubmit(e){
         e.preventDefault();
         await add();
+        setEvent('')
         setBool(bool+1);
-        console.log("joel");
     }
 
     async function HandleClick(e){
@@ -44,21 +44,29 @@ function Todo() {
     }
   return (
     <div>
-        <form>
-        <div></div>
-        <input type='text' id='work' placeholder='Enter your activity to do' value={event} onChange={HandleClick}></input>
-        <button type='submit' onClick={HandleSubmit}>Add</button>
+       <div className='row mt-5'>
+        <div className='col-4'></div>
+        <div className='col-4'>
+        <form >
+        <div className='input-group mb-3'>
+        <input type='text' id='work' placeholder='Enter your activity to do' className='form-control me-2' value={event} onChange={HandleClick}></input>
+        <button type='submit' className='btn btn-success' onClick={HandleSubmit}>Add</button>
+        </div>
         {
           list.map((val) =>{
-           return (<div key={val._id}>
-            <i>{val.value}</i>
-            <button type='button' id={val._id} onClick={()=>{HandleDelete(val._id)}}>Delete</button>
+            return (<div key={val._id} className='mb-3 text-center'>
+            <i className='me-5 h4'>{val.value}</i>
+            <button type='button' id={val._id} className='btn btn-danger' onClick={()=>{HandleDelete(val._id)}}>Delete</button>
             </div>)
           })
         }
-        <button type='button' onClick={HandleDeleteAll}>Reset</button>
+        <div className='text-center'>
+        <button type='button' className='btn btn-info' style={{"width":"50%"}} onClick={HandleDeleteAll}>Reset</button>
+        </div>
         </form>
-        
+        </div>
+        <div className='col-4'></div>
+        </div>
     </div>
   )
 }
