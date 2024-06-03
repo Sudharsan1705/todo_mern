@@ -10,22 +10,36 @@ function Todo() {
     useEffect(()=>
       {
         async function fun(){
-        let res = await axios.get("http://localhost:5000/get").then((res)=> console.log(res)).catch((err) => {console.log(err)})
-      }
+        let res = await axios.get("http://localhost:5000/get").then((res)=> {
+        setList(res.data);
+        }).catch((err) => {console.log(err)})
+       }
       fun();
-    }
+      }
       ,[bool]
     )
+    
+    async function HandleDelete(id){
+      let res = await axios.delete(`http://localhost:5000/delete/${id}`) 
+      setBool(bool+1);
+    }
+    
+    async function HandleDeleteAll(){
+      let res = await axios.delete(`http://localhost:5000/deleteAll`) 
+      setBool(bool+1);
+    }
 
-    function HandleSubmit(e){
+    async function HandleSubmit(e){
         e.preventDefault();
+        await add();
         setBool(bool+1);
     }
+
     async function HandleClick(e){
         await setEvent(e.target.value);
     }
     async function add(){
-    await axios.post("http://localhost:5000/save",{"event":{event}}).then((res)=>console.log(res));
+    await axios.post("http://localhost:5000/save",{"event":event}).then((res)=>console.log(res));
     }
   return (
     <div>
@@ -33,6 +47,15 @@ function Todo() {
         <div></div>
         <input type='text' id='work' placeholder='Enter your activity to do' value={event} onChange={HandleClick}></input>
         <button type='submit' onClick={HandleSubmit}>Add</button>
+        {
+          list.map((val) =>{
+           return (<div key={val._id}>
+            <i>{val.value}</i>
+            <button type='button' id={val._id} onClick={()=>{HandleDelete(val._id)}}>Delete</button>
+            </div>)
+          })
+        }
+        <button type='button' onClick={HandleDeleteAll}>Reset</button>
         </form>
         
     </div>
