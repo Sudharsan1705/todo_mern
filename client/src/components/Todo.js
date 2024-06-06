@@ -6,34 +6,34 @@ import axios from 'axios'
 function Todo() {
     const [list,setList]=useState([]);
     const [event,setEvent]=useState('');
-    const [bool,setBool] = useState(0);
+    const [flag,setFlag] = useState(0);
     useEffect(()=>
       {
-        async function fun(){
+        async function render(){
         let res = await axios.get("http://localhost:5000/get").then((res)=> {
         setList(res.data);
         }).catch((err) => {console.log(err)})
        }
-      fun();
+      render();
       }
-      ,[bool]
+      ,[flag]
     )
     
     async function HandleDelete(id){
       let res = await axios.delete(`http://localhost:5000/delete/${id}`) 
-      setBool(bool+1);
+      setBool(flag+1);
     }
     
     async function HandleDeleteAll(){
       let res = await axios.delete(`http://localhost:5000/deleteAll`) 
-      setBool(bool+1);
+      setBool(flag+1);
     }
 
     async function HandleSubmit(e){
         e.preventDefault();
         await add();
         setEvent('')
-        setBool(bool+1);
+        setBool(flag+1);
     }
 
     async function HandleClick(e){
