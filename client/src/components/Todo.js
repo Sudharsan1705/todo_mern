@@ -21,19 +21,19 @@ function Todo() {
     
     async function HandleDelete(id){
       let res = await axios.delete(`http://localhost:5000/delete/${id}`) 
-      setBool(flag+1);
+      setFlag(flag+1);
     }
     
     async function HandleDeleteAll(){
       let res = await axios.delete(`http://localhost:5000/deleteAll`) 
-      setBool(flag+1);
+      setFlag(flag+1);
     }
 
     async function HandleSubmit(e){
         e.preventDefault();
         await add();
         setEvent('')
-        setBool(flag+1);
+        setFlag(flag+1);
     }
 
     async function HandleClick(e){
