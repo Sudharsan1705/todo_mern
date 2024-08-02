@@ -17,10 +17,10 @@ function Todo() {
       render();
       }
       ,[flag]
-    )
+    ) 
     
-    async function HandleDelete(id){
-      let res = await axios.delete(`http://localhost:5000/delete/${id}`) 
+    async function HandleDelete(val){
+      let res = await axios.delete(`http://localhost:5000/delete/${val}`) 
       setFlag(flag+1);
     }
     
@@ -54,9 +54,9 @@ function Todo() {
         </div>
         {
           list.map((val) =>{
-            return (<div key={val._id} className='mb-3 text-center'>
-            <i className='me-5 h4'>{val.value}</i>
-            <button type='button' id={val._id} className='btn btn-danger' onClick={()=>{HandleDelete(val._id)}}>Delete</button>
+            return (<div key={val} className='mb-3 text-center'>
+            <i className='me-5 h4'>{val}</i>
+            <button type='button' id={val} className='btn btn-danger' onClick={()=>{HandleDelete(val)}}>Delete</button>
             </div>)
           })
         }

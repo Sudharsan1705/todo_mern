@@ -9,28 +9,56 @@ dotenv.config()
 
 app.use(express.json())
 
-const collection = require('./mongoose.js')
+const collections = require('./mongoose.js')
+const user = collections.collection1
+const collection=collections.collection2
 
+let userName = null;
+
+app.post("/verify",async (req,res) => {
+   let name = req.body.user.name;
+   let password = req.body.user.password;
+   let result = await user.countDocuments({$and:[{'name':name,'password':password}]});
+   if(result === 0){
+      return res.status(400).send({status:false});
+   }
+   else{
+      userName=name;
+      return res.status(200).send({status:true});
+   }
+})
+
+app.post("/adduser",async (req,res) => {
+   let name = req.body.user.name;
+   let password = req.body.user.password;
+   let result = await user.countDocuments({$and:[{'name':name,'password':password}]});
+   if(result === 0){
+       await user.create({'name':name,'password':password});  
+       await collection.create({'name':name,'todo':[]});  
+   }
+   userName=name;
+   return res.status(200).json("user added");
+})
 
 app.get("/get",async (req,res) => {
-   let result = await collection.find({});
-   return res.send(result).json();
+   let result = await collection.find({"name":userName});
+   return res.send(result[0].todo).json();
 })
 
 app.post("/save",async (req,res) => {
    let val=req.body.event;
-   await collection.insertMany([{"value":val}]);
+   await collection.updateOne({'name':userName},{$push:{'todo':val}});
    res.status(200).json("data added");    
 })
 
-app.delete(`/delete/:id`,async (req,res) => {
-   console.log(req.params.id)
-   await collection.deleteOne({"_id":req.params.id});
+app.delete(`/delete/:val`,async (req,res) => {
+   let val = req.params.val;
+   let result = await collection.updateOne({"name":userName},{$pull:{"todo":val}});
    res.status(200).json("data deleted");
 })
 
 app.delete(`/deleteAll`,async (req,res) => {
-   await collection.deleteMany({});
+   let result = await collection.updateOne({"name":userName},{$set:{"todo":[]}});
    res.status(200).json("All data deleted");
 })
 
